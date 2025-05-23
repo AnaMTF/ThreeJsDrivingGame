@@ -1,0 +1,45 @@
+<!-- Anamaria-Florentina Titeche      -->
+<!-- Master IE An I Semestrul II 2025 -->
+<!-- Proiect Grafica Computerizata    -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=~, initial-scale=1.0">
+
+  <!-- titlu -->
+  <title>Proiect Grafica Computerizata -- Anamaria-Florentina Titeche</title>
+
+  <!-- poza -->
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <!-- stil -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- importuri din fisiere locale -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./build/three.module.js",
+        "three/addons/": "./addons/"
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <!-- titlu, autor, an -->
+  <div id="informatii">
+    W | A | S | D -> Controale
+  </div>
+  
+  <!-- acest div va contine elementul canvas -->
+  <div id="continut"></div>
+
+  <!-- cod sursa proiect -->
+  <script type="module" src="./main.js"></script>
+</body>
+
+</html>
