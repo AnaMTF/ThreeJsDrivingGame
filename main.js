@@ -48,7 +48,7 @@ const material = new THREE.MeshStandardMaterial({ color: 0xFFFFFF });
 const ground = new THREE.Mesh(geometry, material);
 ground.receiveShadow = true;
 
-ground.position.set(0, - 0.25, - 20);
+ground.position.set(0, -0.64, - 20);
 ground.userData.physics = { mass: 0 };
 
 scene.add(ground);
@@ -64,35 +64,40 @@ physics.addScene(scene);
 // modele + loader
 const modelLoader = new GLTFLoader()
 modelLoader.load('./models/orange-truck/source/model.gltf', (gltf) => {
-    gltf.scene.traverse((obj) => {
-        if (obj.isMesh) {
-            obj.castShadow = obj.receiveShadow = true
-        }
-    })
-
+    // 1. umbre
+    gltf.scene.traverse(obj => {
+        if (obj.isMesh) obj.castShadow = obj.receiveShadow = true;
+    });
     const model = gltf.scene;
-    scene.add(model);
 
-    /* ---------- fit model to scene ---------- */
+    /* 2. FIT MODEL TO SCENE */
+    // bounding-box inițial
     const box = new THREE.Box3().setFromObject(model);
-    const size = new THREE.Vector3();
-    const center = new THREE.Vector3();
-
-    box.getSize(size);                 // (x,y,z) extents
-    box.getCenter(center);             // geometric centre
-
+    const size = new THREE.Vector3(), center = new THREE.Vector3();
+    box.getSize(size);
+    box.getCenter(center);
     const maxDim = Math.max(size.x, size.y, size.z);
-    const targetScale = 1 / maxDim;    // model’s largest edge → 1 unit
+    const targetScale = 1 / maxDim;
+    // aplică scalarea și recentrarea
+    model.scale.setScalar(targetScale);
+    model.position.sub(center.multiplyScalar(targetScale));
 
-    model.scale.setScalar(targetScale);        // uniform down-scale
-    model.position.sub(center.multiplyScalar(targetScale));  // recenter
+    /* 3. ALINIERE PE Y PE BAZA BOX-ULUI SCALED */
+    // recomputează box după scalare și recenter
+    const boxScaled = new THREE.Box3().setFromObject(model);
+    const minY = boxScaled.min.y;          // cel mai jos punct după scala
+    model.position.y -= minY;              // urcă modelul până la y=0
 
-    /* ---------- update controls so the car is in view ---------- */
-    controls.target.set(0, 0, 0);      // now the car’s centre
+    /* 4. POZIȚIONEAZĂ ASFALTUL */
+    // geometria are înălțime 0.5 ⇒ jumătate 0.25; ca suprafața asfaltului (top face) să fie la y=0:
+    ground.position.y = -0.25;
+
+    /* 5. FINAL */
+    scene.add(model);
+    controls.target.set(0, 0, 0);
     controls.update();
-}, undefined, (error) => {
-    console.error(error)
-})
+}, undefined, error => console.error(error));
+
 
 const textureLoader = new THREE.TextureLoader()
 textureLoader.load('./resources/textures/asfalt.jpg', (texture) => {
