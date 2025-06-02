@@ -59,9 +59,8 @@ let strazi = []; // Added to store road objects
 
 initializare();
 
-/*──────────────────────────────────────────────────────────────────────────*
- | Initialize scene, terrain, vehicle, and rain (no physics)             |
- *──────────────────────────────────────────────────────────────────────────*/
+
+//Initialize scene, terrain, vehicle, and rain (no physics)
 async function initializare() {
   initializare_scena();
   initializare_teren();
@@ -109,8 +108,6 @@ function createRings() {
 
   positions.forEach((pos) => {
     const ring = new THREE.Mesh(ringGeo, ringMat);
-    // Lay flat so the car can drive through it:
-    // ring.rotation.x = Math.PI / 2; // Removed to make rings upright
     ring.position.copy(pos);
     ring.castShadow = true;
     ring.receiveShadow = false;
@@ -369,9 +366,8 @@ function creeaza_roata(tyre, rim, steerable) {
   return steerPivot;
 }
 
-/*──────────────────────────────────────────────────────────────────────────*
- | Initialize rain particle system + dat.GUI controls                       |
- *──────────────────────────────────────────────────────────────────────────*/
+
+//Initialize rain particle system + lil-GUI controls
 function initializare_ploaie() {
   const RAIN_COUNT = 10000;
   const AREA_RADIUS = 50;
@@ -422,22 +418,7 @@ async function initializare_cladiri() {
   ];
 
   // Define positions for more buildings
-  const cladirePositions = [
-    // // Original positions (will be scaled)
-    // new THREE.Vector3(15, 0, -10),
-    // new THREE.Vector3(-15, 0, 5),
-    // new THREE.Vector3(0, 0, -20),
-    // // New positions for additional buildings
-    // new THREE.Vector3(30, 0, -30), // cladire1
-    // new THREE.Vector3(-30, 0, 20), // cladire2
-    // new THREE.Vector3(10, 0, -40), // cladire3
-    // new THREE.Vector3(45, 0, 0),   // cladire1
-    // new THREE.Vector3(-45, 0, -15),// cladire2
-    // new THREE.Vector3(-10, 0, -35),// cladire3
-    // new THREE.Vector3(25, 0, 15),  // cladire1
-    // new THREE.Vector3(-25, 0, -25),// cladire2
-    // new THREE.Vector3(0, 0, 30),   // cladire3
-  ];
+  const cladirePositions = [];
   const LATURA = 8;
   // INEL
   for (let i = -4 * LATURA; i <= 4 * LATURA; i += LATURA) {
@@ -630,9 +611,7 @@ async function initializare_strazi() {
   }
 }
 
-/*──────────────────────────────────────────────────────────────────────────*
- | Input handlers (WASD)                                                   |
- *──────────────────────────────────────────────────────────────────────────*/
+// input handlers
 function modificaStareTasteKeyup(e) {
   switch (e.key) {
     case "w":
@@ -683,9 +662,7 @@ function modificaStareTasteKeydown(e) {
   }
 }
 
-/*──────────────────────────────────────────────────────────────────────────*
- | Draw loop – update car movement, wheel rotation, and rain               |
- *──────────────────────────────────────────────────────────────────────────*/
+// functie principala
 function deseneaza() {
   const delta = cronometru.getDelta();
   const MOVE_SPEED = 6;            // units per second
@@ -813,9 +790,6 @@ function deseneaza() {
   renderer.render(scena, camera);
 }
 
-/*──────────────────────────────────────────────────────────────────────────*
- | Window resize                                                         |
- *──────────────────────────────────────────────────────────────────────────*/
 function modificaMarimeaFerestrei() {
   W = window.innerWidth;
   H = window.innerHeight;
